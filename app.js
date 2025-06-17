@@ -22,7 +22,7 @@ const handleSearch = async () => {
 
   city = city.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const aliasMap = {
-    'bucuresti': 'bucharest',
+    'bucuresti': 'bucurești',
     'iasi': 'iași',
     'cluj napoca': 'cluj-napoca'
   };
