@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="app.js" defer></script>
+</head>
+
+<body>
+    <div id="app">
+        <h1>Weather App 🌦️</h1>
+
+        <div id="search-section">
+            <input id="city-input" type="text" placeholder="Introdu un oraș..." />
+            <button id="search-btn">🔍 Caută</button>
+            <button id="location-btn">📍 Locația mea</button>
+            <button id="clear-history-btn">Șterge istoric</button>
+        </div>
+
+        <div id="loading" class="hidden">Se încarcă...</div>
+        <div id="error" class="hidden"></div>
+
+        <section id="history">
+            <h3>Căutări recente</h3>
+            <ul id="history-list"></ul>
+        </section>
+
+        <div id="weather-display" class="hidden">
+            <h2 id="city-name"></h2>
+            <img id="weather-icon" src="" alt="" />
+            <p id="weather-description"></p>
+            <p><strong>Temperatură:</strong> <span id="temperature"></span> °C</p>
+            <p><strong>Se simte ca:</strong> <span id="feels-like"></span> °C</p>
+            <p><strong>Umiditate:</strong> <span id="humidity"></span>%</p>
+            <p><strong>Presiune:</strong> <span id="pressure"></span> hPa</p>
+            <p><strong>Vânt:</strong> <span id="wind-speed"></span> km/h</p>
+            <p><strong>Vizibilitate:</strong> <span id="visibility"></span> m</p>
+            <p><strong>Răsărit:</strong> <span id="sunrise"></span></p>
+            <p><strong>Apus:</strong> <span id="sunset"></span></p>
+        </div>
+    </div>
+</body>
+
+</html>
