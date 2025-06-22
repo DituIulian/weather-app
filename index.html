@@ -16,7 +16,7 @@
         <div id="search-section">
             <input id="city-input" type="text" placeholder="Introdu un oraș..." />
             <button id="search-btn">🔍 Caută</button>
-            <button id="location-btn">📍 Locația mea</button>
+            <button id="location-btn">📍 <span id="label-my-location">Locația mea</span></button>
             <button id="clear-history-btn">Șterge istoric</button>
         </div>
 
@@ -28,7 +28,7 @@
                     <option value="imperial">Fahrenheit (°F)</option>
                 </select>
             </div>
-        
+
             <div class="control-group">
                 <label for="lang-select">Limba descrierii:</label>
                 <select id="lang-select">
@@ -39,30 +39,27 @@
                 </select>
             </div>
         </div>
-          
 
         <div id="loading" class="hidden">Se încarcă...</div>
         <div id="error" class="hidden"></div>
 
         <section id="history">
-            <h3>Căutări recente</h3>
+            <h3 id="recent-searches-title">Căutări recente</h3>
             <ul id="history-list"></ul>
         </section>
-        <!-- test -->
-        <p id="fallback-indicator" class="hidden warning-text"></p> 
 
         <div id="weather-display" class="hidden">
             <h2 id="city-name"></h2>
             <img id="weather-icon" src="" alt="" />
             <p id="weather-description"></p>
-            <p><strong>Temperatură:</strong> <span id="temperature"></span> </p>
-            <p><strong>Se simte ca:</strong> <span id="feels-like"></span> </p>
-            <p><strong>Umiditate:</strong> <span id="humidity"></span>%</p>
-            <p><strong>Presiune:</strong> <span id="pressure"></span> hPa</p>
-            <p><strong>Vânt:</strong> <span id="wind-speed"></span> km/h</p>
-            <p><strong>Vizibilitate:</strong> <span id="visibility"></span> m</p>
-            <p><strong>Răsărit:</strong> <span id="sunrise"></span></p>
-            <p><strong>Apus:</strong> <span id="sunset"></span></p>
+            <p><strong id="label-temperature">Temperatură:</strong> <span id="temperature"></span></p>
+            <p><strong id="label-feels-like">Se simte ca:</strong> <span id="feels-like"></span></p>
+            <p><strong id="label-humidity">Umiditate:</strong> <span id="humidity"></span>%</p>
+            <p><strong id="label-pressure">Presiune:</strong> <span id="pressure"></span> hPa</p>
+            <p><strong id="label-wind">Vânt:</strong> <span id="wind-speed"></span> km/h</p>
+            <p><strong id="label-visibility">Vizibilitate:</strong> <span id="visibility"></span> m</p>
+            <p><strong id="label-sunrise">Răsărit:</strong> <span id="sunrise"></span></p>
+            <p><strong id="label-sunset">Apus:</strong> <span id="sunset"></span></p>
         </div>
     </div>
 </body>
