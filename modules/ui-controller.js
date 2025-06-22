@@ -18,6 +18,8 @@ export const elements = {
     sunset: document.querySelector('#sunset'),
     historyList: document.querySelector('#history-list'),
     clearHistoryBtn: document.querySelector('#clear-history-btn'),
+    unitSelect: document.querySelector('#unit-select'),
+    langSelect: document.querySelector('#lang-select'),
   };
   
   export function showLoading() {
@@ -42,7 +44,24 @@ export const elements = {
     elements.error.textContent = message;
     elements.error.classList.remove('hidden');
     elements.display.classList.add('hidden');
-  }
+}
+  
+export function showMessage(message, type = 'info') {
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('app-message', `message-${type}`);
+  messageElement.textContent = message;
+
+  elements.error.textContent = '';
+  elements.error.classList.add('hidden');
+
+  const container = document.querySelector('.app') || document.body;
+  container.insertBefore(messageElement, container.firstChild);
+
+  setTimeout(() => {
+    messageElement.remove();
+  }, 5000);
+}
+
   
   export function getCityInput() {
     return elements.cityInput.value.trim();
@@ -53,12 +72,12 @@ export const elements = {
   }
   
   export function displayWeather(data) {
-    
+    hideLoading();
     elements.display.classList.remove('hidden');
   
     elements.cityName.textContent = data.name;
-    elements.temperature.textContent = data.main.temp;
-    elements.feelsLike.textContent = data.main.feels_like;
+    elements.temperature.textContent = `${data.main.temp} ${getTemperatureSymbol()}`;
+    elements.feelsLike.textContent = `${data.main.feels_like} ${getTemperatureSymbol()}`;
     elements.weatherDesc.textContent = data.weather[0].description;
     elements.weatherIcon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
     elements.weatherIcon.alt = data.weather[0].description;
@@ -71,6 +90,13 @@ export const elements = {
     elements.sunrise.textContent = formatTime(data.sys.sunrise);
     elements.sunset.textContent = formatTime(data.sys.sunset);
 
+    const fallbackBanner = document.getElementById('fallback-indicator');
+      if (data.isFallback) {
+    fallbackBanner.textContent = `⚠️ Date simulate: ${data.fallbackReason}`;
+    fallbackBanner.classList.remove('hidden');
+     } else {
+    fallbackBanner.classList.add('hidden');
+  }
   
   }
   
@@ -111,4 +137,21 @@ export const elements = {
   export function hideError() {
     elements.error.classList.add('hidden');
 }
+
+const getTemperatureSymbol = () => {
+  return localStorage.getItem('weather-unit') === 'imperial' ? '°F' : '°C';
+};
+
+export const saveUserPreferences = (unit, lang) => {
+  localStorage.setItem('weather-unit', unit);
+  localStorage.setItem('weather-lang', lang);
+};
+
+export const loadUserPreferences = () => {
+  return {
+    unit: localStorage.getItem('weather-unit') || 'metric',
+    lang: localStorage.getItem('weather-lang') || 'ro',
+  };
+};
+
   

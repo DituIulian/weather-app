@@ -20,6 +20,27 @@
             <button id="clear-history-btn">Șterge istoric</button>
         </div>
 
+        <div class="controls">
+            <div class="control-group">
+                <label for="unit-select">Unitatea temperaturii:</label>
+                <select id="unit-select">
+                    <option value="metric">Celsius (°C)</option>
+                    <option value="imperial">Fahrenheit (°F)</option>
+                </select>
+            </div>
+        
+            <div class="control-group">
+                <label for="lang-select">Limba descrierii:</label>
+                <select id="lang-select">
+                    <option value="ro">Română</option>
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                </select>
+            </div>
+        </div>
+          
+
         <div id="loading" class="hidden">Se încarcă...</div>
         <div id="error" class="hidden"></div>
 
@@ -27,13 +48,15 @@
             <h3>Căutări recente</h3>
             <ul id="history-list"></ul>
         </section>
+        <!-- test -->
+        <p id="fallback-indicator" class="hidden warning-text"></p> 
 
         <div id="weather-display" class="hidden">
             <h2 id="city-name"></h2>
             <img id="weather-icon" src="" alt="" />
             <p id="weather-description"></p>
-            <p><strong>Temperatură:</strong> <span id="temperature"></span> °C</p>
-            <p><strong>Se simte ca:</strong> <span id="feels-like"></span> °C</p>
+            <p><strong>Temperatură:</strong> <span id="temperature"></span> </p>
+            <p><strong>Se simte ca:</strong> <span id="feels-like"></span> </p>
             <p><strong>Umiditate:</strong> <span id="humidity"></span>%</p>
             <p><strong>Presiune:</strong> <span id="pressure"></span> hPa</p>
             <p><strong>Vânt:</strong> <span id="wind-speed"></span> km/h</p>
