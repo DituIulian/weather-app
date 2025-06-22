@@ -15,34 +15,20 @@ const setupEventListeners = () => {
     CONFIG.DEFAULT_UNITS = e.target.value;
     const lang = ui.elements.langSelect.value;
     ui.saveUserPreferences(CONFIG.DEFAULT_UNITS, lang);
+    ui.updateStaticLabels(CONFIG.DEFAULT_LANG);
 
-    const lastSearch = JSON.parse(localStorage.getItem('weather-history'))?.[0];
-    if (lastSearch) {
-      try {
-        const data = await getCurrentWeather(lastSearch);
-        ui.resetUI();
-        ui.displayWeather(data);
-      } catch (error) {
-        ui.showError('Eroare la reîncărcarea datelor.');
-      }
-    }
+    const lastSearch = getLastSearch();
+    if (lastSearch) await refreshData(lastSearch);
   });
 
   ui.elements.langSelect.addEventListener('change', async (e) => {
     CONFIG.DEFAULT_LANG = e.target.value;
     const unit = ui.elements.unitSelect.value;
     ui.saveUserPreferences(unit, CONFIG.DEFAULT_LANG);
+    ui.updateStaticLabels(CONFIG.DEFAULT_LANG);
 
-    const lastSearch = JSON.parse(localStorage.getItem('weather-history'))?.[0];
-    if (lastSearch) {
-      try {
-        const data = await getCurrentWeather(lastSearch);
-        ui.resetUI();
-        ui.displayWeather(data);
-      } catch (error) {
-        ui.showError('Eroare la reîncărcarea datelor.');
-      }
-    }
+    const lastSearch = getLastSearch();
+    if (lastSearch) await refreshData(lastSearch);
   });
 };
 
@@ -93,7 +79,7 @@ const handleLocation = async () => {
 
     ui.resetUI();
     ui.displayWeather(data);
-    saveToHistory(data.name); 
+    saveToHistory(data.name);
   } catch (error) {
     ui.resetUI();
     ui.showError(`Locația nu a putut fi determinată: ${error.message}`);
@@ -129,7 +115,21 @@ const clearHistory = () => {
   }
 };
 
-// Initializează aplicația
+const getLastSearch = () => {
+  return JSON.parse(localStorage.getItem('weather-history'))?.[0] || null;
+};
+
+const refreshData = async (city) => {
+  try {
+    const data = await getCurrentWeather(city);
+    ui.resetUI();
+    ui.displayWeather(data);
+  } catch (error) {
+    ui.resetUI();
+    ui.showError('Eroare la reîncărcarea datelor.');
+  }
+};
+
 const initializeApp = () => {
   const prefs = ui.loadUserPreferences();
   CONFIG.DEFAULT_UNITS = prefs.unit;
@@ -138,8 +138,13 @@ const initializeApp = () => {
   ui.elements.unitSelect.value = prefs.unit;
   ui.elements.langSelect.value = prefs.lang;
 
+  ui.updateStaticLabels(CONFIG.DEFAULT_LANG);
+
   setupEventListeners();
   loadHistory();
+
+  const lastSearch = getLastSearch();
+  if (lastSearch) refreshData(lastSearch);
 };
 
 initializeApp();

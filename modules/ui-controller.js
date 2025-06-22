@@ -70,7 +70,7 @@ export const elements = {
   historyList: document.querySelector('#history-list'),
   clearHistoryBtn: document.querySelector('#clear-history-btn'),
   unitSelect: document.querySelector('#unit-select'),
-  langSelect: document.querySelector('#lang-select'),
+  langSelect: document.querySelector('#lang-select')
 };
 
 export function showLoading() {
@@ -93,10 +93,6 @@ export function showError(message) {
   elements.error.textContent = message;
   elements.error.classList.remove('hidden');
   elements.display.classList.add('hidden');
-}
-
-export function hideError() {
-  elements.error.classList.add('hidden');
 }
 
 export function showMessage(message, type = 'info') {
@@ -136,8 +132,9 @@ export function displayWeather(data) {
 
   elements.humidity.textContent = data.main.humidity;
   elements.pressure.textContent = data.main.pressure;
-  elements.windSpeed.textContent = (data.wind.speed * 3.6).toFixed(1);
+  elements.windSpeed.textContent = (data.wind.speed * 3.6).toFixed(1); // m/s to km/h
   elements.visibility.textContent = data.visibility;
+
   elements.sunrise.textContent = formatTime(data.sys.sunrise);
   elements.sunset.textContent = formatTime(data.sys.sunset);
 
@@ -184,6 +181,10 @@ export const renderHistory = (history) => {
   });
 };
 
+export function hideError() {
+  elements.error.classList.add('hidden');
+}
+
 const getTemperatureSymbol = () => {
   return localStorage.getItem('weather-unit') === 'imperial' ? '°F' : '°C';
 };
@@ -196,12 +197,12 @@ export const saveUserPreferences = (unit, lang) => {
 export const loadUserPreferences = () => {
   return {
     unit: localStorage.getItem('weather-unit') || 'metric',
-    lang: localStorage.getItem('weather-lang') || 'ro',
+    lang: localStorage.getItem('weather-lang') || 'ro'
   };
 };
 
 export function updateStaticLabels(lang) {
-  const t = TRANSLATIONS[lang] || TRANSLATIONS['ro'];
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.ro;
 
   const labels = {
     'label-temperature': t.temperature,
@@ -213,7 +214,7 @@ export function updateStaticLabels(lang) {
     'label-sunrise': t.sunrise,
     'label-sunset': t.sunset,
     'label-my-location': t.myLocation,
-    'recent-searches-title': t.recentSearches,
+    'recent-searches-title': t.recentSearches
   };
 
   for (const [id, text] of Object.entries(labels)) {
