@@ -163,23 +163,34 @@ export const renderHistory = (history) => {
     return;
   }
 
-  history.forEach((city) => {
-    const formattedCity = city
+  history.forEach((item) => {
+    const cityName = item.city || 'Oraș necunoscut';
+    const temperature = item.temp !== undefined ? `${Math.round(item.temp)}°C` : '';
+    const icon = item.icon ? `https://openweathermap.org/img/wn/${item.icon}@2x.png` : '';
+
+    const formattedCity = cityName
       .split(' ')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
 
     const li = document.createElement('li');
-    li.textContent = formattedCity;
     li.classList.add('history-item');
     li.style.cursor = 'pointer';
-    li.addEventListener('click', () => {
-      elements.cityInput.value = city;
-      elements.searchBtn.click();
-    });
+
+    li.dataset.city = cityName;
+    li.dataset.lat = item.coordinates?.lat || '';
+    li.dataset.lon = item.coordinates?.lon || '';
+
+    li.innerHTML = `
+      ${icon ? `<img src="${icon}" alt="icon" width="30" style="vertical-align: middle;">` : ''}
+      <strong>${formattedCity}</strong>${temperature ? ` - ${temperature}` : ''}
+    `;
+
     elements.historyList.appendChild(li);
   });
 };
+
+
 
 export function hideError() {
   elements.error.classList.add('hidden');
@@ -222,3 +233,8 @@ export function updateStaticLabels(lang) {
     if (el) el.textContent = text;
   }
 }
+
+export const addHistoryEventListeners = (onHistoryClick, onClearHistory) => {
+  elements.historyList.addEventListener('click', onHistoryClick);
+  elements.clearHistoryBtn.addEventListener('click', onClearHistory);
+};
