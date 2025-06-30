@@ -216,16 +216,16 @@ export function updateStaticLabels(lang) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.ro;
 
   const labels = {
-    'label-temperature': t.temperature,
-    'label-feels-like': t.temperatureFeelsLike,
-    'label-humidity': t.humidity,
-    'label-pressure': t.pressure,
-    'label-wind': t.wind,
-    'label-visibility': t.visibility,
-    'label-sunrise': t.sunrise,
-    'label-sunset': t.sunset,
+    'label-temperature': '🌡️ ' + t.temperature,
+    'label-feels-like': '🤔 ' + t.temperatureFeelsLike,
+    'label-humidity': '💧 ' + t.humidity,
+    'label-pressure': '📏 ' + t.pressure,
+    'label-wind': '🌬️ ' + t.wind,
+    'label-visibility': '👀 ' + t.visibility,
+    'label-sunrise': '🌅 ' + t.sunrise,
+    'label-sunset': '🌇 ' + t.sunset,
     'label-my-location': t.myLocation,
-    'recent-searches-title': t.recentSearches
+    'recent-searches-title': '🕓 ' + t.recentSearches
   };
 
   for (const [id, text] of Object.entries(labels)) {

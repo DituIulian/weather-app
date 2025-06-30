@@ -40,12 +40,10 @@ export class Logger {
 
     this.logs.push(logEntry);
 
-    // Limitare la maximul configurat
     if (this.logs.length > this.maxLogs) {
       this.logs.shift();
     }
 
-    // Afișează în consolă
     console[level](`[${timestamp}] [${level.toUpperCase()}] ${message}`, data || '');
   }
 
@@ -62,5 +60,4 @@ export class Logger {
   }
 }
 
-// Exportă o instanță unică (singleton)
 export const logger = new Logger();

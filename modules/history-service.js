@@ -58,7 +58,6 @@ export class HistoryService {
   getHistory() {
     const all = this._loadFromStorage();
   
-    // Filtrăm doar intrările valide (cu city, coordonate, temperatură și icon)
     const valid = all.filter(item =>
       item.city &&
       item.coordinates &&
@@ -70,7 +69,7 @@ export class HistoryService {
   
     if (valid.length !== all.length) {
       logger.warn('Unele intrări invalide au fost eliminate din istoric');
-      this._saveToStorage(valid); // curățăm și în storage
+      this._saveToStorage(valid); 
     }
   
     return valid;

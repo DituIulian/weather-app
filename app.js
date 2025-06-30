@@ -40,10 +40,10 @@ const handleHistoryClick = async (event) => {
 
 const setupEventListeners = () => {
   ui.addHistoryEventListeners(handleHistoryClick, clearHistory);
-  ui.elements.searchBtn.addEventListener('click', handleSearch);
   ui.elements.clearHistoryBtn.addEventListener('click', clearHistory);
-  ui.elements.cityInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') handleSearch();
+  document.querySelector('#search-form').addEventListener('submit', (e) => {
+    e.preventDefault(); 
+    handleSearch();
   });
   ui.elements.locationBtn.addEventListener('click', handleLocation);
 
