@@ -1,62 +1,81 @@
+/**
+ * Instanță singleton pentru logging
+ * @class Logger
+ */
 import { CONFIG } from './config.js';
 
-const levels = {
-  debug: 0,
-  info: 1,
-  warn: 2,
-  error: 3
-};
-
-export class Logger {
+class Logger {
   constructor() {
-    this.logs = [];
     this.enabled = CONFIG.LOGGING.ENABLED;
-    this.level = levels[CONFIG.LOGGING.LEVEL] || levels.info;
+    this.level = CONFIG.LOGGING.LEVEL || 'info';
+    this.levels = ['debug', 'info', 'warn', 'error'];
     this.maxLogs = CONFIG.LOGGING.MAX_LOGS;
+    this.logs = [];
   }
 
-  debug(message, data = null) {
-    this._log('debug', message, data);
+  /**
+   * Verifică dacă un anumit tip de mesaj ar trebui logat
+   * @param {string} type - Tipul logului: debug, info, warn, error
+   * @returns {boolean} True dacă se poate loga
+   * @private
+   */
+  _shouldLog(type) {
+    return (
+      this.enabled &&
+      this.levels.indexOf(type) >= this.levels.indexOf(this.level)
+    );
   }
 
-  info(message, data = null) {
-    this._log('info', message, data);
+  /**
+   * Adaugă un log în istoricul intern și îl afișează în consolă
+   * @param {string} type - Tipul logului
+   * @param {string} message - Mesajul de log
+   * @param {any} [data] - Date adiționale opționale
+   * @private
+   */
+  _log(type, message, data) {
+    if (!this._shouldLog(type)) return;
+
+    const entry = {
+      timestamp: new Date().toISOString(),
+      type,
+      message,
+      data,
+    };
+
+    this.logs.push(entry);
+    if (this.logs.length > this.maxLogs) this.logs.shift();
+
+    const formatted = `[${entry.timestamp}] [${type.toUpperCase()}] ${message}`;
+    console[type](formatted, data || '');
   }
 
-  warn(message, data = null) {
-    this._log('warn', message, data);
+  debug(msg, data) {
+    this._log('debug', msg, data);
   }
 
-  error(message, error = null) {
-    const errorData = error instanceof Error ? { message: error.message, stack: error.stack } : error;
-    this._log('error', message, errorData);
+  info(msg, data) {
+    this._log('info', msg, data);
   }
 
-  _log(level, message, data) {
-    if (!this.enabled || levels[level] < this.level) return;
-
-    const timestamp = new Date().toISOString();
-    const logEntry = { timestamp, level, message, data };
-
-    this.logs.push(logEntry);
-
-    if (this.logs.length > this.maxLogs) {
-      this.logs.shift();
-    }
-
-    console[level](`[${timestamp}] [${level.toUpperCase()}] ${message}`, data || '');
+  warn(msg, data) {
+    this._log('warn', msg, data);
   }
 
+  error(msg, data) {
+    this._log('error', msg, data);
+  }
+
+  /**
+   * Returnează toate logurile salvate
+   * @returns {Array<Object>} Lista de loguri
+   */
   getLogs() {
     return this.logs;
   }
 
-  clearLogs() {
+  clear() {
     this.logs = [];
-  }
-
-  exportLogs() {
-    return this.logs.map(log => `[${log.timestamp}] [${log.level.toUpperCase()}] ${log.message} ${log.data ? JSON.stringify(log.data) : ''}`).join('\n');
   }
 }
 

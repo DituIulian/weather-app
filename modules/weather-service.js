@@ -1,72 +1,96 @@
-import { CONFIG, API_ENDPOINTS, ERROR_MESSAGES } from './config.js';
-import { MOCK_DATA } from './mock-data.js';
+import { CONFIG, API_ENDPOINTS } from './config.js';
+import { logger } from './logger.js';
 
-const buildUrl = (endpoint, params = {}) => {
-  const url = new URL(CONFIG.API_BASE_URL + endpoint);
-  url.searchParams.set('appid', CONFIG.API_KEY);
-  url.searchParams.set('units', CONFIG.DEFAULT_UNITS);
-  url.searchParams.set('lang', CONFIG.DEFAULT_LANG);
+const cache = new Map();
 
-  for (const [key, value] of Object.entries(params)) {
-    if (value !== undefined && value !== '') {
-      url.searchParams.set(key, value);
-    }
-  }
+/**
+ * Creează un identificator unic pentru cache în funcție de oraș, unități și limbă
+ * @param {string} city - Numele orașului
+ * @param {string} units - Unitățile de măsură
+ * @param {string} lang - Limba descrierii meteo
+ * @returns {string} Cheia unică de cache
+ */
+const getCacheKey = (city, units, lang) => `${city}_${units}_${lang}`.toLowerCase();
 
-  return url.toString();
+/**
+ * Verifică dacă o intrare în cache este încă validă
+ * @param {Object} entry - Obiectul de cache salvat
+ * @returns {boolean} True dacă intrarea este valabilă, altfel false
+ */
+const isCacheValid = (entry) => {
+  if (!entry) return false;
+  const age = Date.now() - entry.timestamp;
+  return age < CONFIG.CACHE.TTL;
 };
 
-const makeRequest = async (url) => {
-  try {
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      if (response.status === 404) {
-        throw new Error(ERROR_MESSAGES.CITY_NOT_FOUND);
-      }
-      if (response.status === 401) {
-        throw new Error(ERROR_MESSAGES.INVALID_KEY);
-      }
-      throw new Error(ERROR_MESSAGES.GENERIC);
-    }
-
-    return await response.json();
-  } catch (err) {
-    if (err instanceof TypeError) {
-      throw new Error(ERROR_MESSAGES.NO_NETWORK);
-    }
-    throw err;
-  }
-};
+/**
+ * Obține datele meteo curente pe baza orașului
+ * @async
+ * @function getCurrentWeather
+ * @param {string} city - Numele orașului
+ * @returns {Promise<Object>} Obiect cu datele meteo curente
+ * @throws {Error} Dacă orașul nu este găsit sau API-ul eșuează
+ */
 
 export const getCurrentWeather = async (city) => {
-  const url = buildUrl(API_ENDPOINTS.CURRENT_WEATHER, { q: city });
+  const units = CONFIG.DEFAULT_UNITS;
+  const lang = CONFIG.DEFAULT_LANG;
+  const cacheKey = getCacheKey(city, units, lang);
+
+  if (CONFIG.CACHE.ENABLED && isCacheValid(cache.get(cacheKey))) {
+    logger.info(`Date din cache pentru ${city}`);
+    return cache.get(cacheKey).data;
+  }
+
+  const url = `${CONFIG.API_BASE_URL}${API_ENDPOINTS.CURRENT_WEATHER}?q=${encodeURIComponent(city)}&appid=${CONFIG.API_KEY}&units=${units}&lang=${lang}`;
 
   try {
-    return await makeRequest(url);
+    const response = await fetch(url);
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error('Orașul nu a fost găsit.');
+      }
+      throw new Error('Eroare la încărcarea datelor meteo.');
+    }
+
+    const data = await response.json();
+
+    if (CONFIG.CACHE.ENABLED) {
+      cache.set(cacheKey, { data, timestamp: Date.now() });
+    }
+
+    return data;
   } catch (error) {
-    console.warn('Folosim fallback pentru oraș:', city, '-', error.message);
-    return {
-      ...MOCK_DATA,
-      name: city,
-      isFallback: true,
-      fallbackReason: error.message,
-    };
+    logger.error('Eroare la getCurrentWeather', error);
+    throw error;
   }
 };
 
+/**
+ * Obține datele meteo pe baza coordonatelor geografice
+ * @async
+ * @function getWeatherByCoords
+ * @param {number} lat - Latitudinea
+ * @param {number} lon - Longitudinea
+ * @returns {Promise<Object>} Obiect cu datele meteo curente
+ * @throws {Error} Dacă API-ul eșuează
+ */
 export const getWeatherByCoords = async (lat, lon) => {
-  const url = buildUrl(API_ENDPOINTS.CURRENT_WEATHER, { lat, lon });
+  const units = CONFIG.DEFAULT_UNITS;
+  const lang = CONFIG.DEFAULT_LANG;
+
+  const url = `${CONFIG.API_BASE_URL}${API_ENDPOINTS.CURRENT_WEATHER}?lat=${lat}&lon=${lon}&appid=${CONFIG.API_KEY}&units=${units}&lang=${lang}`;
 
   try {
-    return await makeRequest(url);
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Eroare la încărcarea datelor meteo pe coordonate.');
+    }
+
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.warn('Folosim fallback pentru coordonate:', lat, lon, '-', error.message);
-    return {
-      ...MOCK_DATA,
-      name: `Lat: ${lat}, Lon: ${lon}`,
-      isFallback: true,
-      fallbackReason: error.message,
-    };
+    logger.error('Eroare la getWeatherByCoords', error);
+    throw error;
   }
 };

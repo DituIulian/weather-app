@@ -51,18 +51,21 @@
         <p id="fallback-indicator" class="hidden warning-text"></p>
 
         <div id="weather-display" class="hidden">
-            <h2 id="city-name"></h2>
-            <img id="weather-icon" src="" alt="" />
-            <p id="weather-description"></p>
-            <p><strong id="label-temperature">Temperatură:</strong> <span id="temperature"></span></p>
-            <p><strong id="label-feels-like">Se simte ca:</strong> <span id="feels-like"></span></p>
-            <p><strong id="label-humidity">Umiditate:</strong> <span id="humidity"></span>%</p>
-            <p><strong id="label-pressure">Presiune:</strong> <span id="pressure"></span> hPa</p>
-            <p><strong id="label-wind">Vânt:</strong> <span id="wind-speed"></span> km/h</p>
-            <p><strong id="label-visibility">Vizibilitate:</strong> <span id="visibility"></span> m</p>
-            <p><strong id="label-sunrise">Răsărit:</strong> <span id="sunrise"></span></p>
-            <p><strong id="label-sunset">Apus:</strong> <span id="sunset"></span></p>
-        </div>
+            <h2 id="city-name">Oraș</h2>
+            <img id="weather-icon" src="" alt="iconiță" />
+            <p class="weather-main"><span id="temperature">--</span></p>
+            <p class="weather-feels"><span id="label-feels-like">Feels like:</span> <span id="feels-like">--</span></p>
+            <p id="weather-description" style="margin-bottom: 20px;"></p>
+        
+            <div class="weather-stats">
+                <p><strong id="label-humidity">Umiditate:</strong> <span id="humidity"></span>%</p>
+                <p><strong id="label-pressure">Presiune:</strong> <span id="pressure"></span> hPa</p>
+                <p><strong id="label-wind">Vânt:</strong> <span id="wind-speed"></span> km/h</p>
+                <p><strong id="label-visibility">Vizibilitate:</strong> <span id="visibility"></span> m</p>
+                <p><strong id="label-sunrise">Răsărit:</strong> <span id="sunrise"></span></p>
+                <p><strong id="label-sunset">Apus:</strong> <span id="sunset"></span></p>
+            </div> 
+         </div>
     </div>
 </body>
 

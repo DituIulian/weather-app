@@ -1,4 +1,20 @@
-// modules/location-service.js
+/**
+ * Obține coordonatele geografice ale utilizatorului.
+ * Încearcă mai întâi cu Geolocation API, apoi face fallback la IP.
+ * 
+ * @function getCoords
+ * @async
+ * @returns {Promise<{ latitude: number, longitude: number, source: 'gps'|'ip', accuracy: 'precise'|'approximate' }>}
+ * Coordonatele obținute și sursa lor (gps sau ip).
+ * 
+ * @throws {Error} Dacă niciuna dintre metode nu funcționează.
+ *
+ * @example
+ * const coords = await getCoords();
+ * console.log(coords.latitude, coords.longitude);
+ */
+
+
 export const getCoords = () => new Promise((resolve, reject) => {
     const fallbackToIp = async () => {
       try {

@@ -59,13 +59,44 @@ button:hover {
 
 #weather-display {
     margin-top: 20px;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+    padding: 20px;
+    background: rgba(186, 173, 161, 0.35);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    text-align: center;
 }
 
-#weather-display p {
-    margin: 8px 0;
+#weather-display h2 {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+}
+
+#weather-icon {
+    width: 80px;
+    height: 80px;
+    margin: 10px auto;
+    display: block;
+}
+
+.weather-main {
+    font-size: 2.4rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.weather-feels {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #ddd;
+}
+
+.weather-stats {
+    text-align: left;
+    margin-top: 15px;
+}
+
+.weather-stats p {
+    margin: 6px 0;
 }
 
 ul#history-list {

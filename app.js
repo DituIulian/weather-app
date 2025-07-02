@@ -5,7 +5,6 @@ import { CONFIG } from './modules/config.js';
 import { logger } from './modules/logger.js';
 import { historyService } from './modules/history-service.js';
 
-// 🔁 DECLARĂM PRIMA DATA HANDLEHISTORYCLICK!
 const handleHistoryClick = async (event) => {
   const item = event.target.closest('.history-item');
   if (!item) return;
