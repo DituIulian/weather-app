@@ -227,7 +227,7 @@ export const renderHistory = (history) => {
 
     li.innerHTML = `
       ${icon ? `<img src="${icon}" alt="icon" width="30" style="vertical-align: middle;">` : ''}
-      <strong>${formattedCity}</strong>${temperature ? ` - ${temperature}` : ''}
+      <strong>${formattedCity}</strong>${temperature ? `: ${temperature}` : ''}
     `;
 
     elements.historyList.appendChild(li);

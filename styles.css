@@ -117,6 +117,10 @@ ul#history-list {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
+#recent-searches-title{
+    padding-top: 5px;
+}
+
 #clear-history-btn {
     margin-top: 10px;
     background-color: #d9534f;
